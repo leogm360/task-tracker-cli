@@ -1,8 +1,9 @@
-package task
+package tasks
 
 import (
 	"errors"
 	"fmt"
+	"task-tracker-cli/src/data"
 	"time"
 )
 
@@ -16,6 +17,7 @@ const (
 	Done
 )
 
+// Returns the string representation of a task status
 func (ts TaskStatus) String() string {
 	switch {
 	case ts == 0:
@@ -32,21 +34,21 @@ func (ts TaskStatus) String() string {
 // Represents a Task entity containing the id, descrition, status, creation time
 // and last update time
 type Task struct {
-	id          int
-	description string
-	status      TaskStatus
-	createdAt   string
-	updatedAt   string
+	Id          int        `json:"id"`
+	Description string     `json:"description"`
+	Status      TaskStatus `json:"status"`
+	CreatedAt   string     `json:"createdAt"`
+	UpdatedAt   string     `json:"updatedAt"`
 }
 
 // Creates a new task entity with the default values, validating the input
 func NewTask(description string) (*Task, error) {
 	return &Task{
-		id:          1,
-		description: description,
-		status:      0,
-		createdAt:   time.Now().Format(time.RFC3339),
-		updatedAt:   time.Now().Format(time.RFC3339),
+		Id:          1,
+		Description: description,
+		Status:      0,
+		CreatedAt:   time.Now().Format(time.RFC3339),
+		UpdatedAt:   time.Now().Format(time.RFC3339),
 	}, nil
 }
 
@@ -60,25 +62,27 @@ func (t *Task) UpdateDescription(newDescription string) (bool, error) {
 		return false, errors.New("description should be at least 4 characters long")
 	}
 
-	t.description = newDescription
-	t.updatedAt = time.Now().Format(time.RFC3339)
+	t.Description = newDescription
+	t.UpdatedAt = time.Now().Format(time.RFC3339)
 
 	return true, nil
 }
 
 // Update the task entity 'status' field, validating the input
 func (t *Task) UpdateStatus(newStatus TaskStatus) (bool, error) {
-	if t.status == newStatus {
-		return false, errors.New("")
+	if t.Status == newStatus {
+		return false, errors.New("task is already in this status")
 	}
 
-	t.status = newStatus
-	t.updatedAt = time.Now().Format(time.RFC3339)
+	t.Status = newStatus
+	t.UpdatedAt = time.Now().Format(time.RFC3339)
 
 	return true, nil
 }
 
-// Persists the task entity on the given data source and format
-func (t *Task) Persist() (bool, error) {
-	panic("Implement persist")
+// Persists the task entity on the given data source
+func (t *Task) Persist(ds data.DataSourcer) (bool, error) {
+	ok, err := ds.Write(t)
+
+	return ok, err
 }
