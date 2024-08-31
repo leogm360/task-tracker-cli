@@ -24,6 +24,7 @@
   - [x] tasks;
 - [x] Create a get method;
 - [x] Create a set method;
+- [x] Create a append method;
 - [x] Make task list persistable;
 - [ ] Doc the task list entity code;
 - [ ] Add unit tests.
@@ -47,11 +48,15 @@
 - [ ] Make possible to list all done tasks;
 - [ ] Add cli doc (help) for the entry proint and each method;
 
-### 4. Options:
+### 4. Exceptions:
+
+- [ ] Create unknown args exeception;
+
+### 5. Options:
 
 - [ ] Make it possible to change de default path to the JSON database.
 
-### 5. Support and Compile:
+### 6. Support and Compile:
 
 - [ ] Support and compile for Linux;
 - [ ] Support and compile for Darwin;
